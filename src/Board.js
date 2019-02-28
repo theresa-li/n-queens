@@ -86,7 +86,7 @@
         var spot = rowIndex[i];
         if (spot === 1) {
           count++; 
-            if (count = 1) {
+            if (count > 1) {
               return true; 
             }
         }
@@ -133,30 +133,45 @@
       var rows = this.rows();
       var row = rows[0];
       for (var i = 0; i < row.length; i++) { // Iterate through rows
-        // for (var j = 0; j < rows.length; j++) { // Iterate through columns
-        //   var check = rows[j][i];
-        if (this.hasColConflictAt(i)) {
-          return true;
+        var count = 0;
+        for (var j = 0; j < rows.length; j++) { // Iterate through columns
+          var check = rows[j][i];
+          if (check === 1) {
+            count++;
+            if (count > 1) {
+              return true;
+            }
+          } 
         }
-            
-        // }
       }
-      // for (var i = 0; i < rows.length; i++) {
-      //   if (this.hasColConflictAt(i)) {
-      //     return true;
-      //   }
-      // }
       return false;
     },
-
 
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {   // z
+      var rows = this.rows();
+      var c = majorDiagonalColumnIndexAtFirstRow;
+      var count = 0;
+      
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i][c] === undefined) {
+          c++;
+          continue;
+        }
+        var spot = rows[i][c];
+        if (spot === 1) {
+          count++;
+          if (count > 1) {
+            return true;
+          }
+        }
+        c++;
+      }
+      return false; 
     },
 
     // test if any major diagonals on this board contain conflicts
