@@ -80,7 +80,6 @@
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
       // board is array of arrays, under board.attributes
-      var rows = this.rows();
       var count = 0;
       for (var i = 0; i < rowIndex.length; i++) {
         var spot = rowIndex[i];

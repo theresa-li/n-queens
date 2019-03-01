@@ -19,34 +19,41 @@ window.findNRooksSolution = function(n) {
   
   var finder = function() {
   
-  var board = makeEmptyMatrix(n);
-  // console.log("this",this.board);
-  console.log(board);
-  var count = 0;
-    for (var i = 0; i < n; i++) {
-      for (var j = 0; j < n; j++) { 
-        var location = board[i][j];
-        var viableLocation = (!board.hasRowConflictAt(i) && !board.hasColConflictAt(j));
-        if (viableLocation) {
-          board[i][j] = 1;
+  var board = new Board({n:n}); 
+  var currBoard = board.rows();
+    for (var i = 0; i < n; i++) { // Iterate through row
+      var row = currBoard[i];
+      for (var j = 0; j < n; j++) { // Iterate through column
+        if (currBoard[i][j] === undefined) {
+          continue;
+        }
+        var location = currBoard[i][j]; //hasRowConflictAt takes in a row
+        // var viableLocation = (!currBoard.hasRowConflictAt(row) || !currBoard.hasColConflictAt(j)); 
+        board.togglePiece(i,j);
+        if (board.hasAnyRooksConflicts()) {
+          board.togglePiece(i,j);
         }
       }
     }
-    if (count >= n) {
-      return board;
-    }
-    return board;
+    return currBoard;
   }
-  
   var solution = finder();
-  
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var board = new Board({n:n}); 
+  var grid = board.rows();
+  
+  var finder = function(grid) {
+    //place rook on first row
+    //while (i < n) will iterate through row
+    return finder(grid);
+  }
+  
+  var solutionCount = finder(); //fixme
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
@@ -67,11 +74,3 @@ window.countNQueensSolutions = function(n) {
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
-
-var makeEmptyMatrix = function(n) {
-    return _(_.range(n)).map(function() {
-      return _(_.range(n)).map(function() {
-        return 0;
-      });
-    });
-  };
